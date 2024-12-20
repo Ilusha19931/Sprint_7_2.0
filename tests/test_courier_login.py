@@ -3,7 +3,7 @@ import pytest
 import requests
 
 from base_metods.base_metods import create_courier_for_test
-from data import URL, URL_COURIER, URL_LOGIN
+from data import URL, URL_COURIER, URL_LOGIN, Text
 
 
 class TestUserLogin:
@@ -31,7 +31,7 @@ class TestUserLogin:
 
         response = requests.post(f'{URL}/courier/login', payload)
 
-        assert response.status_code == 400 and response.text == '{"code":400,"message":"Недостаточно данных для входа"}'
+        assert response.status_code == 400 and response.text == Text.text_no_needed_field_login
 
     @allure.description(
         'Проверяем, что система вернет ошибку, если неправильно указать логин или пароль'
@@ -47,7 +47,7 @@ class TestUserLogin:
 
         response = requests.post(f'{URL}{URL_LOGIN}', payload)
 
-        assert response.status_code == 404 and response.text == '{"code":404,"message":"Учетная запись не найдена"}'
+        assert response.status_code == 404 and response.text == Text.text_not_found_login
 
     @allure.description(
         'Проверяем, что если какого-то поля нет, запрос возвращает ошибку'
@@ -63,7 +63,7 @@ class TestUserLogin:
 
         response = requests.post(f'{URL}{URL_LOGIN}', payload)
 
-        assert response.status_code == 400 and response.text == '{"code":400,"message":"Недостаточно данных для входа"}'
+        assert response.status_code == 400 and response.text == Text.text_no_needed_field_login
 
     @allure.description(
         'Проверяем, что успешный запрос возвращает id'

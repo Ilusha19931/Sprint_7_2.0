@@ -38,3 +38,10 @@ order = {
     "comment": "Vchera",
     "color": [color]
 }
+class Text:
+
+    text_error_2_courier = '{"code":409,"message":"Этот логин уже используется. Попробуйте другой."}'
+    text_correct = '{"ok":true}'
+    text_no_needed_field_register = '{"code":400,"message":"Недостаточно данных для создания учетной записи"}'
+    text_no_needed_field_login = '{"code":400,"message":"Недостаточно данных для входа"}'
+    text_not_found_login = '{"code":404,"message":"Учетная запись не найдена"}'

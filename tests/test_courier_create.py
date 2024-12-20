@@ -1,5 +1,5 @@
-from base_metods.base_metods import create_courier_for_test
-from data import URL, payload_first, payload_second, URL_COURIER, URL_LOGIN
+from base_metods.base_metods import create_courier_for_test, delete_courier
+from data import URL, payload_first, payload_second, URL_COURIER, URL_LOGIN, Text
 
 import allure
 import requests
@@ -9,22 +9,23 @@ class TestCouriers:
     @allure.description(
         'Проверка, курьера можно создать'
     )
-    def test_correct_create_courier(self):
+    def test_correct_create_courier(self, delete_courier):
         payload=create_courier_for_test()
         response = requests.post(f'{URL}{URL_COURIER}', payload)
         response = requests.post(f'{URL}{URL_LOGIN}', payload)
+
         assert response.status_code == 200 and "id" in response.text
 
     @allure.description(
         'Проверка, нельзя создать двух одинаковых курьеров'
     )
-    def test_not_create_courier_with_2_identical_payload(self):
+    def test_not_create_courier_with_2_identical_payload(self, delete_courier):
         payload = create_courier_for_test()
         response = requests.post(f'{URL}{URL_COURIER}', payload)
 
         response = requests.post(f'{URL}{URL_COURIER}', payload)
 
-        assert response.status_code == 409 and response.text == '{"code":409,"message":"Этот логин уже используется. Попробуйте другой."}'
+        assert response.status_code == 409 and response.text == Text.text_error_2_courier
 
     @allure.description(
         'Проверка, если создать пользователя с логином, который уже есть, возвращается ошибка.'
@@ -35,7 +36,7 @@ class TestCouriers:
 
         response = requests.post(f'{URL}{URL_COURIER}', payload_second)
 
-        assert response.status_code == 409 and response.text == '{"code":409,"message":"Этот логин уже используется. Попробуйте другой."}'
+        assert response.status_code == 409 and response.text == Text.text_error_2_courier
 
 
     @allure.description(
@@ -72,7 +73,7 @@ class TestCouriers:
         payload = create_courier_for_test()
         response = requests.post(f'{URL}{URL_COURIER}', payload)
 
-        assert response.status_code == 201 and response.text == '{"ok":true}'
+        assert response.status_code == 201 and response.text == Text.text_correct
 
 
     @allure.description(
@@ -91,4 +92,4 @@ class TestCouriers:
 
         response = requests.post(f'{URL}{URL_COURIER}', payload)
 
-        assert response.text == '{"code":400,"message":"Недостаточно данных для создания учетной записи"}'
+        assert response.text == Text.text_no_needed_field
